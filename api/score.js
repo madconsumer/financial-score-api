@@ -45,7 +45,7 @@ export default async function handler(req, res) {
       },
       {
         role: 'user',
-        content: `User: ${name}\nScore: ${percentile} percentile\nAnswers: ${JSON.stringify(answers)}\nProvide 1-2 paragraphs of personalized commentary.`
+        content: `User: ${name}\nScore: ${percentile} percentile\nAnswers: ${JSON.stringify(answers)}\nProvide 1-2 paragraphs of personalized commentary on their financial situation.`
       }
     ];
 
