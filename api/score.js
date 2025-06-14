@@ -2,12 +2,20 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { OpenAI } from 'openai';
 
+export const config = {
+  api: {
+    bodyParser: true
+  }
+};
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
 
   try {
     const { answers, name } = req.body;
@@ -16,7 +24,6 @@ export default async function handler(req, res) {
     const rubricRaw = await fs.readFile(filePath, 'utf-8');
     const rubric = JSON.parse(rubricRaw);
 
-    // Scoring
     let totalScore = 0;
     for (const [index, answer] of answers.entries()) {
       const q = rubric[index];
@@ -31,15 +38,14 @@ export default async function handler(req, res) {
 
     const percentile = Math.round((totalScore / maxScore) * 100);
 
-    // GPT Commentary
     const messages = [
       {
         role: 'system',
-        content: 'You are a financial advisor bot who gives short, clear commentary on a user’s financial survey results. The tone is helpful, conversational, and encouraging. Do not give investment advice. End with one area they could improve.'
+        content: 'You are a friendly financial coach that explains someone’s financial survey results in helpful, clear language. Don’t give investment advice, just thoughtful commentary.'
       },
       {
         role: 'user',
-        content: `User: ${name}\nScore: ${percentile} percentile\nAnswers: ${JSON.stringify(answers)}\nGive a short paragraph of feedback.`
+        content: `User: ${name}\nScore: ${percentile} percentile\nAnswers: ${JSON.stringify(answers)}\nProvide a short paragraph of personalized commentary.`
       }
     ];
 
@@ -53,8 +59,8 @@ export default async function handler(req, res) {
     const feedback = chatResponse.choices[0].message.content;
 
     res.status(200).json({ percentile, feedback });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
