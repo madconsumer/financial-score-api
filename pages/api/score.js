@@ -60,7 +60,7 @@ export default async function handler(req, res) {
         role: 'user',
         content: `User: ${name}\nScore: ${percentile} percentile\nAnswers: ${JSON.stringify(
           answers
-        )}\nProvide a short, personalized paragraph.`
+        )}\nProvide two personalized paragraphs for the user describing why they received the score they did and how they can improve based on their inputs.`
       }
     ]
 
