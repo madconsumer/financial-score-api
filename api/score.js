@@ -13,15 +13,19 @@ const openai = new OpenAI({
 })
 
 export default async function handler(req, res) {
-  // CORS HEADERS
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-
-  // Handle preflight
+  // Handle preflight CORS request
   if (req.method === 'OPTIONS') {
-    return res.status(200).end()
+    return res
+      .writeHead(200, {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      })
+      .end()
   }
+
+  // Set CORS headers for actual POST request
+  res.setHeader('Access-Control-Allow-Origin', '*')
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' })
@@ -52,13 +56,13 @@ export default async function handler(req, res) {
       {
         role: 'system',
         content:
-          'You are a friendly financial coach who explains a user’s financial survey results. Be clear, positive, and encouraging. Do not give investment advice. End with one improvement suggestion.'
+          'You are a helpful financial coach who explains a user’s financial survey results. Be clear and encouraging. Do not give investment advice. End with one area they could improve.'
       },
       {
         role: 'user',
         content: `User: ${name}\nScore: ${percentile} percentile\nAnswers: ${JSON.stringify(
           answers
-        )}\nPlease provide a short paragraph of personalized commentary.`
+        )}\nProvide a short, personalized paragraph.`
       }
     ]
 
@@ -71,9 +75,9 @@ export default async function handler(req, res) {
 
     const feedback = chatResponse.choices[0].message.content
 
-    res.status(200).json({ percentile, feedback })
+    return res.status(200).json({ percentile, feedback })
   } catch (err) {
     console.error(err)
-    res.status(500).json({ error: 'Internal Server Error' })
+    return res.status(500).json({ error: 'Internal Server Error' })
   }
 }
