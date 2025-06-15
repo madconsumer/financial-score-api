@@ -64,11 +64,7 @@ export default async function handler(req, res) {
 },
       {
   role: "user",
-  content: `Here is the user's financial profile: 
-- Score percentile: 76th
-- Responses: ["26-35", "$101,000 – $250,000", "16-25%", "..."]
-
-Please generate friendly, encouraging feedback summarizing what they’re doing well and what they could improve.`
+  content: `Here is the user's financial profile:\n- Score percentile: ${percentile}th\n- Responses: ${JSON.stringify(answers)}\n\nPlease generate friendly, encouraging feedback summarizing what they’re doing well and what they could improve.`
 }
 
     ]
