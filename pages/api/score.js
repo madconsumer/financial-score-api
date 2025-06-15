@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { OpenAI } from 'openai'
+import Cors from 'cors'
 
 export const config = {
   api: {
@@ -8,20 +9,32 @@ export const config = {
   }
 }
 
+// Initialize the cors middleware
+const cors = Cors({
+  methods: ['POST', 'OPTIONS'],
+  origin: '*', // Allow all origins for now
+  credentials: false
+})
+
+// Helper method to wait for a middleware to execute before continuing
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result)
+      }
+      return resolve(result)
+    })
+  })
+}
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 })
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-
-  // Handle preflight CORS request
-  if (req.method === 'OPTIONS') {
-    res.status(200).end()
-    return
-  }
+  // Run the middleware
+  await runMiddleware(req, res, cors)
 
   // Only allow POST requests
   if (req.method !== 'POST') {
@@ -59,7 +72,7 @@ export default async function handler(req, res) {
         role: 'user',
         content: `User: ${name}\nScore: ${percentile} percentile\nAnswers: ${JSON.stringify(
           answers
-        )}\nProvide two personalized paragraphs for the user describing why they received the score they did and how they can improve based on their inputs.`
+        )}\nProvide a short, personalized paragraph.`
       }
     ]
 
