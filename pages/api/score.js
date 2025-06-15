@@ -59,28 +59,31 @@ export default async function handler(req, res) {
 
     const messages = [
       {
-  role: 'system',
-  content: `You are a helpful financial coach who explains a user's financial survey results. Be clear and encouraging. Do not give investment advice. End with one area they could improve.`
+  "role": "system",
+  "content": "You are a friendly and insightful financial coach. A user just completed a personal finance survey. Your job is to interpret their answers and provide thoughtful, encouraging feedback. Highlight their financial strengths and gently point out one area they could improve, using plain language. Do not just repeat their answers. Instead, infer habits or patterns and give practical, engaging insights they can relate to. Avoid giving investment advice or legal recommendations."
 },
       {
-        role: 'user',
-        content: `User: ${name}\nScore: ${percentile} percentile\nAnswers: ${JSON.stringify(
-          answers
-        )}\nProvide a short, personalized paragraph.`
-      }
+  role: "user",
+  content: `Here is the user's financial profile: 
+- Score percentile: 76th
+- Responses: ["26-35", "$101,000 – $250,000", "16-25%", "..."]
+
+Please generate friendly, encouraging feedback summarizing what they’re doing well and what they could improve.`
+}
+
     ]
 
     const chatResponse = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages,
+      model: 'gpt-4o',
+      messages: [...],
       temperature: 0.7,
-      max_tokens: 200
+      max_tokens: 700
     })
 
     const feedback = chatResponse.choices[0].message.content
     console.log('Sending response:', { percentile, feedback: feedback.substring(0, 50) + '...' })
 
-    return res.status(200).json({ percentile, feedback })
+    return res.status(200).json({ percentile, feedback:chatResponse.choices[0].message.content.trim(), })
   } catch (err) {
     console.error('Error:', err)
     return res.status(500).json({ error: 'Internal Server Error', details: err.message })
