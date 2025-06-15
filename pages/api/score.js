@@ -1,7 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { OpenAI } from 'openai'
-import Cors from 'cors'
 
 export const config = {
   api: {
@@ -9,40 +8,36 @@ export const config = {
   }
 }
 
-// Initialize the cors middleware
-const cors = Cors({
-  methods: ['POST', 'OPTIONS'],
-  origin: '*', // Allow all origins for now
-  credentials: false
-})
-
-// Helper method to wait for a middleware to execute before continuing
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result)
-      }
-      return resolve(result)
-    })
-  })
-}
-
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 })
 
 export default async function handler(req, res) {
-  // Run the middleware
-  await runMiddleware(req, res, cors)
+  console.log('Request method:', req.method)
+  console.log('Request headers:', req.headers)
 
-  // Only allow POST requests
+  // Set comprehensive CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Origin, X-Requested-With')
+  res.setHeader('Access-Control-Max-Age', '86400')
+
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    console.log('Handling OPTIONS preflight request')
+    return res.status(200).end()
+  }
+
+  // Only allow POST requests for the actual endpoint
   if (req.method !== 'POST') {
+    console.log('Method not allowed:', req.method)
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
 
   try {
+    console.log('Processing POST request')
     const { answers, name } = req.body
+    console.log('Received data:', { name, answersLength: answers?.length })
 
     const filePath = path.resolve('./data/survey_scoring_rubric.json')
     const rubricRaw = await fs.readFile(filePath, 'utf-8')
@@ -84,10 +79,11 @@ export default async function handler(req, res) {
     })
 
     const feedback = chatResponse.choices[0].message.content
+    console.log('Sending response:', { percentile, feedback: feedback.substring(0, 50) + '...' })
 
     return res.status(200).json({ percentile, feedback })
   } catch (err) {
-    console.error(err)
-    return res.status(500).json({ error: 'Internal Server Error' })
+    console.error('Error:', err)
+    return res.status(500).json({ error: 'Internal Server Error', details: err.message })
   }
 }
