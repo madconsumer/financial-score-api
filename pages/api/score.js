@@ -13,19 +13,18 @@ const openai = new OpenAI({
 })
 
 export default async function handler(req, res) {
+  // Set CORS headers for all requests
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+
+  // Handle preflight CORS request
   if (req.method === 'OPTIONS') {
-    return res
-      .writeHead(200, {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      })
-      .end()
+    res.status(200).end()
+    return
   }
 
-  // Set CORS headers for actual POST request
-  res.setHeader('Access-Control-Allow-Origin', '*')
-
+  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
@@ -55,13 +54,13 @@ export default async function handler(req, res) {
       {
         role: 'system',
         content:
-          'You are a helpful financial coach who explains a user’s financial survey results. Be clear and encouraging. Do not give investment advice. End with one area they could improve.'
+          'You are a helpful financial coach who explains a user's financial survey results. Be clear and encouraging. Do not give investment advice. End with one area they could improve.'
       },
       {
         role: 'user',
         content: `User: ${name}\nScore: ${percentile} percentile\nAnswers: ${JSON.stringify(
           answers
-        )}\nProvide 1-2 personalized paragraphs based on the user responses on why the user received the score they did and where they can improve.`
+        )}\nProvide a short, personalized paragraph.`
       }
     ]
 
