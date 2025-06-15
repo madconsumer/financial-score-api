@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     const { answers, name } = req.body
     console.log('Received data:', { name, answersLength: answers?.length })
 
-    const filePath = path.resolve('./data/survey_scoring_rubric.json')
+    const filePath = path.join(process.cwd(), 'data/survey_scoring_rubric.json')
     const rubricRaw = await fs.readFile(filePath, 'utf-8')
     const rubric = JSON.parse(rubricRaw)
 
