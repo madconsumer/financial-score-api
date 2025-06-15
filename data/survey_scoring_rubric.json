@@ -24,10 +24,6 @@
     "question": "What is your annual household income (from ALL sources, your job, your side hustle, your allowance from mom)?",
     "responses": [
       {
-        "response": "50+",
-        "points": 1.0
-      },
-      {
         "response": "$0 - $50,000",
         "points": 1.0
       },
@@ -49,19 +45,15 @@
     "question": "How much of your income do you save and/or invest?",
     "responses": [
       {
-        "response": "$250,000+",
-        "points": 8.0
-      },
-      {
         "response": "0-5%",
         "points": 0.0
       },
       {
-        "response": "5-15%",
+        "response": "6-15%",
         "points": 2.0
       },
       {
-        "response": "15-25%",
+        "response": "16-25%",
         "points": 4.0
       },
       {
@@ -73,10 +65,6 @@
   {
     "question": "What is your approximate net worth (excluding your primary residence)?",
     "responses": [
-      {
-        "response": "25%+",
-        "points": 6.0
-      },
       {
         "response": "$0 - $25,000",
         "points": 1.0
@@ -103,10 +91,6 @@
     "question": "What is your investment experience?",
     "responses": [
       {
-        "response": "$500,000+",
-        "points": 10.0
-      },
-      {
         "response": "None",
         "points": 0.0
       },
@@ -127,10 +111,6 @@
   {
     "question": "What is your primary goal for investing?",
     "responses": [
-      {
-        "response": "Extensive \u2013 Duh my friends come to me for advice on investing",
-        "points": 6.0
-      },
       {
         "response": "Preserving my money",
         "points": 0.0
@@ -153,10 +133,6 @@
     "question": "How long do you plan to invest for with your portfolio?",
     "responses": [
       {
-        "response": "Swinging for the fences",
-        "points": 0.0
-      },
-      {
         "response": "I\u2019m here for a good time, not a long time",
         "points": 0.0
       },
@@ -178,10 +154,6 @@
     "question": "Do you have a Roth IRA?",
     "responses": [
       {
-        "response": "In it for the long-haul",
-        "points": 4.0
-      },
-      {
         "response": "Yes",
         "points": 4.0
       },
@@ -195,10 +167,6 @@
     "question": "What about a 401(k)?",
     "responses": [
       {
-        "response": "No, who\u2019s Roth?",
-        "points": 0.0
-      },
-      {
         "response": "Yes",
         "points": 3.0
       },
@@ -211,10 +179,6 @@
   {
     "question": "Have you made any alternative investments (real estate, private equity, venture capital)?",
     "responses": [
-      {
-        "response": "No",
-        "points": 0.0
-      },
       {
         "response": "Yes",
         "points": 4.0
@@ -233,10 +197,6 @@
     "question": "How would you define your risk tolerance?",
     "responses": [
       {
-        "response": "Does bottle service at the club count?",
-        "points": -1.0
-      },
-      {
         "response": "Low \u2013 \u201cI wear my seat belt in the back seat\u201d",
         "points": 0.0
       },
@@ -245,7 +205,7 @@
         "points": 0.0
       },
       {
-        "response": "Aggressive \u2013 \u201cI ask for spicy at the local Thai restaurant\u201d",
+        "response": "Aggressive \u2013 \u201cI order spicy at Thai restaurants\u201d",
         "points": 0.0
       }
     ]
@@ -253,10 +213,6 @@
   {
     "question": "Do you expect to withdraw a significant portion of your investment portfolio within the next year?",
     "responses": [
-      {
-        "response": "Aggressive \u2013 \u201cI ask for spicy at the local Thai restaurant\u201d",
-        "points": 0.0
-      },
       {
         "response": "Yes",
         "points": 0.0
@@ -275,10 +231,6 @@
     "question": "Do you rent or own your primary residence?",
     "responses": [
       {
-        "response": "What investment portfolio..?",
-        "points": -1.0
-      },
-      {
         "response": "I rent it",
         "points": 0.0
       },
@@ -296,10 +248,6 @@
     "question": "Do you know your credit score?",
     "responses": [
       {
-        "response": "I live for free (not in my parents\u2019 basement I swear)",
-        "points": 2.0
-      },
-      {
         "response": "No. And don\u2019t you dare ask me to check",
         "points": -1.0
       },
@@ -308,11 +256,11 @@
         "points": 0.0
       },
       {
-        "response": "650-700",
+        "response": "651-700",
         "points": 1.0
       },
       {
-        "response": "700-760",
+        "response": "701-760",
         "points": 3.0
       },
       {
@@ -325,10 +273,6 @@
     "question": "How much do you have in student loans?",
     "responses": [
       {
-        "response": "760+",
-        "points": 5.0
-      },
-      {
         "response": "None",
         "points": 2.0
       },
@@ -337,15 +281,15 @@
         "points": 0.0
       },
       {
-        "response": "$20,000 - $50,000",
+        "response": "$21,000 - $50,000",
         "points": -2.0
       },
       {
-        "response": "$50,000 - $100,000",
+        "response": "$51,000 - $100,000",
         "points": -4.0
       },
       {
-        "response": "So much that it hurts to keep track",
+        "response": "So much that it hurts to look",
         "points": -6.0
       }
     ]
@@ -353,10 +297,6 @@
   {
     "question": "How much do you have in credit card debt (not your current balance)?",
     "responses": [
-      {
-        "response": "So much that it hurts to keep track",
-        "points": -6.0
-      },
       {
         "response": "None",
         "points": 2.0
@@ -378,10 +318,6 @@
   {
     "question": "Do you have an investment plan?",
     "responses": [
-      {
-        "response": "I still use my debit card",
-        "points": -1.0
-      },
       {
         "response": "Yes",
         "points": 4.0
