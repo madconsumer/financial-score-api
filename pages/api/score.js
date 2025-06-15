@@ -59,10 +59,9 @@ export default async function handler(req, res) {
 
     const messages = [
       {
-        role: 'system',
-        content:
-          'You are a helpful financial coach who explains a user's financial survey results. Be clear and encouraging. Do not give investment advice. End with one area they could improve.'
-      },
+  role: 'system',
+  content: `You are a helpful financial coach who explains a user's financial survey results. Be clear and encouraging. Do not give investment advice. End with one area they could improve.`
+},
       {
         role: 'user',
         content: `User: ${name}\nScore: ${percentile} percentile\nAnswers: ${JSON.stringify(
