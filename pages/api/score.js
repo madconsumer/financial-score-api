@@ -36,8 +36,8 @@ export default async function handler(req, res) {
 
   try {
     console.log('Processing POST request')
-    const { answers, name } = req.body
-    console.log('Received data:', { name, answersLength: answers?.length })
+    const { answers, name, email } = req.body
+    console.log('Received data:', { name, email, answersLength: answers?.length })
 
     const filePath = path.join(process.cwd(), 'data/survey_scoring_rubric.json')
     const rubricRaw = await fs.readFile(filePath, 'utf-8')
@@ -59,14 +59,13 @@ export default async function handler(req, res) {
 
     const messages = [
       {
-  "role": "system",
-  "content": "You are a friendly and insightful financial coach. A user just completed a personal finance survey. Your job is to interpret their answers and provide thoughtful, encouraging feedback. Highlight their financial strengths and gently point out one area they could improve, using plain language. Do not just repeat their answers. Instead, infer habits or patterns and give practical, engaging insights they can relate to. Avoid giving investment advice or legal recommendations."
-},
+        role: "system",
+        content: "You are a friendly and insightful financial coach. A user just completed a personal finance survey. Your job is to interpret their answers and provide thoughtful, encouraging feedback. Highlight their financial strengths and gently point out one area they could improve, using plain language. Do not just repeat their answers. Instead, infer habits or patterns and give practical, engaging insights they can relate to. Avoid giving investment advice or legal recommendations."
+      },
       {
-  role: "user",
-  content: `Here is the user's financial profile:\n- Score percentile: ${percentile}th\n- Responses: ${JSON.stringify(answers)}\n\nPlease generate friendly, encouraging feedback summarizing what they’re doing well and what they could improve.`
-}
-
+        role: "user",
+        content: `Here is the user's financial profile:\n- Score percentile: ${percentile}th\n- Responses: ${JSON.stringify(answers)}\n\nPlease generate friendly, encouraging feedback summarizing what they’re doing well and what they could improve.`
+      }
     ]
 
     const chatResponse = await openai.chat.completions.create({
@@ -79,7 +78,28 @@ export default async function handler(req, res) {
     const feedback = chatResponse.choices[0].message.content
     console.log('Sending response:', { percentile, feedback: feedback.substring(0, 50) + '...' })
 
-    return res.status(200).json({ percentile, feedback:chatResponse.choices[0].message.content.trim(), })
+    // 🔹 Send data to Zapier webhook
+    fetch('https://hooks.zapier.com/hooks/catch/23470823/uolgdw9/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        email,
+        timestamp: new Date().toISOString(),
+        percentile,
+        ...answers.reduce((acc, val, i) => {
+          acc[`Q${i + 1}`] = val
+          return acc
+        }, {})
+      })
+    }).catch(err => {
+      console.error('Zapier webhook failed silently:', err.message)
+    })
+
+    return res.status(200).json({
+      percentile,
+      feedback: feedback.trim()
+    })
   } catch (err) {
     console.error('Error:', err)
     return res.status(500).json({ error: 'Internal Server Error', details: err.message })
