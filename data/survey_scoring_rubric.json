@@ -21,6 +21,27 @@
     ]
   },
   {
+    "question": "How often is money on your mind?",
+    "responses": [
+      {
+        "response": "Never",
+        "points": -2.0
+      },
+      {
+        "response": "Only when I need to spend it",
+        "points": -1.0
+      },
+      {
+        "response": "Regularly",
+        "points": 1.0
+      },
+      {
+        "response": "Literally all the time",
+        "points": 0.0
+      }
+    ]
+  },
+  {
     "question": "What is your annual household income (from ALL sources, your job, your side hustle, your allowance from mom)?",
     "responses": [
       {
@@ -38,6 +59,19 @@
       {
         "response": "$250,000+",
         "points": 8.0
+      }
+    ]
+  },
+  {
+    "question": "Do you have a brokerage account (like Robinhood, Schwab, ETRADE, etc.)?",
+    "responses": [
+      {
+        "response": "Yes",
+        "points": 2.0
+      },
+      {
+        "response": "No",
+        "points": 0.0
       }
     ]
   },
